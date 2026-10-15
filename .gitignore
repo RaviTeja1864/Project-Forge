@@ -1,0 +1,17 @@
+.env
+.venv/
+venv/
+node_modules/
+dist/
+coverage/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+*.egg-info/
+.ruff_cache/
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
