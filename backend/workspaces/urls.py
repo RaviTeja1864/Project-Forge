@@ -1,0 +1,147 @@
+from django.urls import include, path
+from rest_framework.routers import SimpleRouter
+
+from backend.workspaces.views import (
+    DesignGenerationView,
+    OllamaStatusView,
+    RequirementEvidenceListCreateView,
+    RequirementsGenerationView,
+    RequirementVerificationHistoryView,
+    RequirementVerificationView,
+    ResearchGenerationView,
+    TechnologyGenerationView,
+    WorkspaceArtifactDetailView,
+    WorkspaceArtifactListView,
+    WorkspaceArtifactRevisionView,
+    WorkspaceArtifactVersionCompareView,
+    WorkspaceArtifactVersionDetailView,
+    WorkspaceArtifactVersionsView,
+    WorkspaceCollaboratorListCreateView,
+    WorkspaceCollaboratorRevokeView,
+    WorkspaceSpecificationDetailView,
+    WorkspaceSpecificationExportView,
+    WorkspaceSpecificationInputsView,
+    WorkspaceSpecificationListCreateView,
+    WorkspaceTaskDetailView,
+    WorkspaceTaskListCreateView,
+    WorkspaceTaskPlanView,
+    WorkspaceViewSet,
+)
+
+router = SimpleRouter(use_regex_path=False)
+router.register("", WorkspaceViewSet, basename="workspace")
+
+urlpatterns = [
+    path("llm/status/", OllamaStatusView.as_view(), name="ollama-status"),
+    path(
+        "<uuid:workspace_id>/implementation/tasks/generate/",
+        WorkspaceTaskPlanView.as_view(),
+        name="workspace-task-plan",
+    ),
+    path(
+        "<uuid:workspace_id>/implementation/tasks/",
+        WorkspaceTaskListCreateView.as_view(),
+        name="workspace-tasks",
+    ),
+    path(
+        "<uuid:workspace_id>/implementation/tasks/<int:task_id>/",
+        WorkspaceTaskDetailView.as_view(),
+        name="workspace-task-detail",
+    ),
+    path(
+        "<uuid:workspace_id>/requirements/<uuid:artifact_id>/<str:requirement_id>/evidence/",
+        RequirementEvidenceListCreateView.as_view(),
+        name="requirement-evidence",
+    ),
+    path(
+        "<uuid:workspace_id>/requirements/<uuid:artifact_id>/<str:requirement_id>/verification/",
+        RequirementVerificationView.as_view(),
+        name="requirement-verification",
+    ),
+    path(
+        "<uuid:workspace_id>/requirements/<uuid:artifact_id>/<str:requirement_id>/verification/history/",
+        RequirementVerificationHistoryView.as_view(),
+        name="requirement-verification-history",
+    ),
+    path(
+        "<uuid:workspace_id>/collaborators/",
+        WorkspaceCollaboratorListCreateView.as_view(),
+        name="workspace-collaborators",
+    ),
+    path(
+        "<uuid:workspace_id>/collaborators/<int:collaborator_id>/",
+        WorkspaceCollaboratorRevokeView.as_view(),
+        name="workspace-collaborator-revoke",
+    ),
+    path(
+        "<uuid:workspace_id>/specifications/",
+        WorkspaceSpecificationListCreateView.as_view(),
+        name="workspace-specifications",
+    ),
+    path(
+        "<uuid:workspace_id>/specifications/<uuid:artifact_id>/",
+        WorkspaceSpecificationDetailView.as_view(),
+        name="workspace-specification-detail",
+    ),
+    path(
+        "<uuid:workspace_id>/specifications/<uuid:artifact_id>/inputs/",
+        WorkspaceSpecificationInputsView.as_view(),
+        name="workspace-specification-inputs",
+    ),
+    path(
+        "<uuid:workspace_id>/specifications/<uuid:artifact_id>/export.<str:export_format>",
+        WorkspaceSpecificationExportView.as_view(),
+        name="workspace-specification-export",
+    ),
+    path(
+        "<uuid:workspace_id>/artifacts/",
+        WorkspaceArtifactListView.as_view(),
+        name="workspace-artifacts",
+    ),
+    path(
+        "<uuid:workspace_id>/artifacts/<uuid:artifact_id>/",
+        WorkspaceArtifactDetailView.as_view(),
+        name="workspace-artifact-detail",
+    ),
+    path(
+        "<uuid:workspace_id>/artifacts/<uuid:artifact_id>/revise/",
+        WorkspaceArtifactRevisionView.as_view(),
+        name="workspace-artifact-revise",
+    ),
+    path(
+        "<uuid:workspace_id>/artifacts/<uuid:artifact_id>/versions/",
+        WorkspaceArtifactVersionsView.as_view(),
+        name="workspace-artifact-versions",
+    ),
+    path(
+        "<uuid:workspace_id>/artifacts/<uuid:artifact_id>/versions/compare/",
+        WorkspaceArtifactVersionCompareView.as_view(),
+        name="workspace-artifact-version-compare",
+    ),
+    path(
+        "<uuid:workspace_id>/artifacts/<uuid:artifact_id>/versions/<uuid:version_id>/",
+        WorkspaceArtifactVersionDetailView.as_view(),
+        name="workspace-artifact-version-detail",
+    ),
+    path(
+        "<uuid:workspace_id>/generate/research/",
+        ResearchGenerationView.as_view(),
+        name="workspace-generate-research",
+    ),
+    path(
+        "<uuid:workspace_id>/generate/requirements/",
+        RequirementsGenerationView.as_view(),
+        name="workspace-generate-requirements",
+    ),
+    path(
+        "<uuid:workspace_id>/generate/technology/",
+        TechnologyGenerationView.as_view(),
+        name="workspace-generate-technology",
+    ),
+    path(
+        "<uuid:workspace_id>/generate/design/",
+        DesignGenerationView.as_view(),
+        name="workspace-generate-design",
+    ),
+    path("", include(router.urls)),
+]
